@@ -1,0 +1,10 @@
+﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+
+  <scrollable-settings-container>
+    <string-setting text='Ready' value='ready-text' get-event='ready-get-event' on-change='ready-change'></string-setting>
+    <string-setting text='Set' value='set-text' get-event='set-get-event' on-change='set-change'></string-setting>
+    <string-setting text='Go!' value='go-text' get-event='go-get-event' on-change='go-change'></string-setting>
+    <!--<button text='Preview' on-click='preview-btn-action'/>-->
+  </scrollable-settings-container>
+  
+</bg>
