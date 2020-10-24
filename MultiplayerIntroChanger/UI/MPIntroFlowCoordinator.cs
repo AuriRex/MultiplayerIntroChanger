@@ -21,7 +21,7 @@ namespace MultiplayerIntroChanger.UI
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
             try {
                 if (firstActivation) {
-                    SetTitle("Custom Multiplayer Intro Audio");
+                    SetTitle("Custom Multiplayer Intro");
                     showBackButton = true;
                     ProvideInitialViewControllers(introListView, settingsView, null);
                 }

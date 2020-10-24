@@ -30,8 +30,6 @@ namespace MultiplayerIntroChanger.UI
         [UIAction("#post-parse")]
         public void SetupText() {
 
-            Logger.log.Info("SetupText() called!");
-
             readyText = Plugin.ReadyText;
             setText = Plugin.SetText;
             goText = Plugin.GoText;
@@ -40,38 +38,23 @@ namespace MultiplayerIntroChanger.UI
             parserParams.EmitEvent("set-get-event");
             parserParams.EmitEvent("go-get-event");
 
-            /*parserParams.AddEvent("ready-change", () => {
-                PluginConfig.Instance.ReadyText = readyText;
-                Plugin.Instance.LoadTexts();
-            });
-
-            parserParams.AddEvent("set-change", () => {
-                PluginConfig.Instance.SetText = setText;
-                Plugin.Instance.LoadTexts();
-            });
-
-            parserParams.AddEvent("go-change", () => {
-                PluginConfig.Instance.GoText = goText;
-                Plugin.Instance.LoadTexts();
-            });*/
-
         }
 
         [UIAction("ready-change")]
         public void ReadyChange(string change) {
-            PluginConfig.Instance.ReadyText = change;
+            MPIConfig.ReadyText = change;
             Plugin.Instance.LoadTexts();
         }
 
         [UIAction("set-change")]
         public void SetChange(string change) {
-            PluginConfig.Instance.SetText = change;
+            MPIConfig.SetText = change;
             Plugin.Instance.LoadTexts();
         }
 
         [UIAction("go-change")]
         public void GoChange(string change) {
-            PluginConfig.Instance.GoText = change;
+            MPIConfig.GoText = change;
             Plugin.Instance.LoadTexts();
         }
 

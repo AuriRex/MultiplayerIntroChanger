@@ -1,3 +1,10 @@
-﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-
-</bg>
+﻿<horizontal xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+  <vertical pad-left='50'>
+    <page-button event-click='soundList#PageUp' direction='Up' />
+    <list id='soundList' expand-cell='true' select-cell='soundSelected' />
+    <page-button event-click='soundList#PageDown' direction='Down' />
+  </vertical>
+  <vertical child-control-height='false'>
+    <button id='reload-button' text='Reload sounds' on-click='reloadSounds' />
+  </vertical>
+</horizontal>

@@ -34,42 +34,52 @@ namespace MultiplayerIntroChanger
 
         internal const string AudioPath = "/UserData/MultiplayerIntroSounds";
 
-
-        //Uncomment to use BSIPA's config
-
         [Init]
-        public void Init(IPALogger logger, Config config, PluginMetadata metadata) {
+        public void Init(IPALogger logger, IPA.Config.Config config, PluginMetadata metadata) {
             Instance = this;
-            Configuration.PluginConfig.Instance = config.Generated<Configuration.PluginConfig>();
+            MPIConfig.Init(config);
             Logger.log = logger;
-            Logger.log.Debug("Config loaded");
         }
 
         [OnStart]
         public void OnApplicationStart() {
+            MPIConfig.Load();
             Patches.ApplyHarmonyPatches();
             LoadTexts();
-            MultiplayerIntroAudioLoader.Init();
+            MPIAudioLoader.Init();
             SharedCoroutineStarter.instance.StartCoroutine(LoadAudio());
             MPIntroUI.CreateMenu();
         }
 
         [OnExit]
         public void OnApplicationQuit() {
+            MPIConfig.Save();
             Patches.RemoveHarmonyPatches();
             MPIntroUI.RemoveMenu();
         }
 
         internal void LoadTexts() {
-            ReadyText = PluginConfig.Instance.ReadyText;
-            SetText = PluginConfig.Instance.SetText;
-            GoText = PluginConfig.Instance.GoText;
+            ReadyText = MPIConfig.ReadyText;
+            SetText = MPIConfig.SetText;
+            GoText = MPIConfig.GoText;
         }
 
-        public IEnumerator LoadAudio() {
-            Logger.log.Notice("Attempting to load Audio files");
-            yield return MultiplayerIntroAudioLoader.Instance.Load();
+        private IEnumerator LoadAudio() {
+            Logger.log.Info("Attempting to load Audio files ...");
+            yield return MPIAudioLoader.Instance.Load();
         }
+
+        public IEnumerator ReloadAudioCoroutine(Action callback) {
+            Logger.log.Info("Attempting to reload Audio files ...");
+            yield return MPIAudioLoader.Instance.Reload();
+            callback();
+        }
+
+        public void ReloadAudio(Action callback) {
+            SharedCoroutineStarter.instance.StartCoroutine(ReloadAudioCoroutine(callback));
+        }
+
+        
 
     }
 }

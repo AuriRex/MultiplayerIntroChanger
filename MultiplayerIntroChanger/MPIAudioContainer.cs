@@ -10,7 +10,7 @@ using UnityEngine.Networking;
 
 namespace MultiplayerIntroChanger
 {
-    public class MultiplayerIntroAudioContainer
+    public class MPIAudioContainer
     {
 
         public string Name { get; private set; }
@@ -18,14 +18,17 @@ namespace MultiplayerIntroChanger
         public AudioClip ReadyClip { get; private set; }
         public AudioClip SetClip { get; private set; }
         public AudioClip GoClip { get; private set; }
+        public Texture2D Icon { get; private set; }
+        public string ReplacesText { get; internal set; }
 
-        public MultiplayerIntroAudioContainer(string name, AudioClip ready = null, AudioClip set = null, AudioClip go = null, AudioClip build = null) {
+        public MPIAudioContainer(string name, AudioClip ready = null, AudioClip set = null, AudioClip go = null, AudioClip build = null, Texture2D icon = null) {
 
             Name = name;
             BuildUpClip = build;
             ReadyClip = ready;
             SetClip = set;
             GoClip = go;
+            Icon = icon;
 
         }
 
@@ -38,15 +41,50 @@ namespace MultiplayerIntroChanger
             if (!name.Equals("Default")) {
                 yield return GetFromPath(path, "Ready.ogg");
                 ReadyClip = clip;
+                clip = null;
                 yield return GetFromPath(path, "Set.ogg");
                 SetClip = clip;
+                clip = null;
                 yield return GetFromPath(path, "Go.ogg");
                 GoClip = clip;
+                clip = null;
                 yield return GetFromPath(path, "Buildup.ogg");
                 BuildUpClip = clip;
                 clip = null;
+                yield return GetIconFromPath(path, "Icon.png");
             }
+
+            SetReplacesText();
             
+        }
+
+        private void SetReplacesText() {
+
+            ReplacesText = string.Empty;
+
+            if(ReadyClip) {
+                ReplacesText += "Ready";
+            }
+
+            if (SetClip) {
+                if (ReplacesText != string.Empty) ReplacesText += ", ";
+                ReplacesText += "Set";
+            }
+
+            if (GoClip) {
+                if (ReplacesText != string.Empty) ReplacesText += ", ";
+                ReplacesText += "Go";
+            }
+
+            if (BuildUpClip) {
+                if (ReplacesText != string.Empty) ReplacesText += ", ";
+                ReplacesText += "Buildup";
+            }
+
+            if(ReplacesText == string.Empty) {
+                ReplacesText = "None, delete this Folder!";
+            }
+
         }
 
         private AudioClip clip;
@@ -64,6 +102,21 @@ namespace MultiplayerIntroChanger
                     Logger.log.Notice("Failed to load " + sound + " audio: " + www1.error);
                 else
                     clip = DownloadHandlerAudioClip.GetContent(www1);
+            }
+        }
+
+        public IEnumerator GetIconFromPath(string path, string iconName) {
+
+            if (File.Exists(path + iconName)) {
+                string url1 = "file:///" + path + iconName;
+
+                UnityWebRequest www1 = UnityWebRequestTexture.GetTexture(url1);
+                yield return www1.SendWebRequest();
+
+                if (www1.isNetworkError)
+                    Logger.log.Notice("Failed to load " + iconName + " texture: " + www1.error);
+                else
+                    Icon = DownloadHandlerTexture.GetContent(www1);
             }
         }
     }

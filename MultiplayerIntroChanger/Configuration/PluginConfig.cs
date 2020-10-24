@@ -9,9 +9,9 @@ namespace MultiplayerIntroChanger.Configuration
     {
         public static PluginConfig Instance { get; set; }
         // Must be 'virtual' if you want BSIPA to detect a value change and save the config automatically.
-        public virtual string ReadyText { get; set; } = ""; 
-        public virtual string SetText { get; set; } = ""; 
-        public virtual string GoText { get; set; } = "";
+        public virtual string ReadyText { get; set; } = "READY!"; 
+        public virtual string SetText { get; set; } = "SET!"; 
+        public virtual string GoText { get; set; } = "GO!";
 
         public virtual string LastSound { get; set; } = "";
 

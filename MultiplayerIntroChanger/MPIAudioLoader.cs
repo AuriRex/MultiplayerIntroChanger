@@ -11,49 +11,87 @@ using UnityEngine.Networking;
 
 namespace MultiplayerIntroChanger
 {
-    public class MultiplayerIntroAudioLoader
+    public class MPIAudioLoader
     {
 
-        public static MultiplayerIntroAudioLoader Instance;
+        public static MPIAudioLoader Instance;
 
         public static void Init() {
             if(Instance == null) {
-                Instance = new MultiplayerIntroAudioLoader();
+                Instance = new MPIAudioLoader();
             }
+
+            MutedAC = new MPIAudioContainer("Mute", Util.GetSilentAudioClip(), Util.GetSilentAudioClip(), Util.GetSilentAudioClip(), Util.GetSilentAudioClip(), Util.GetMutedIcon()) { ReplacesText = "Silence those pesky intro sounds!" };
+
         }
 
-        public List<MultiplayerIntroAudioContainer> IntroAudioList { get; private set; } = new List<MultiplayerIntroAudioContainer>();
+        public List<MPIAudioContainer> IntroAudioList { get; private set; } = new List<MPIAudioContainer>();
 
-        public MultiplayerIntroAudioContainer CurrentAC { get; private set; }
+        public MPIAudioContainer CurrentAC { get; private set; }
 
-        public static MultiplayerIntroAudioContainer DefaultAC { get; private set; } = new MultiplayerIntroAudioContainer("Default");
+        public static MPIAudioContainer DefaultAC { get; private set; } = new MPIAudioContainer("Default") { ReplacesText = "The default multiplayer intro sounds!" };
+        public static MPIAudioContainer MutedAC { get; private set; }
+
+        internal MPIAudioContainer SelectAudio(int idx) {
+
+            MPIAudioContainer[] ial = IntroAudioList.ToArray();
+
+            if (idx < ial.Length && idx >= 0) {
+                CurrentAC = ial[idx];
+            } else {
+                CurrentAC = DefaultAC;
+            }
+
+            MPIConfig.LastSound = CurrentAC.Name;
+
+            return CurrentAC;
+        }
+
+        internal int GetIndexOfSelected() {
+
+            foreach(MPIAudioContainer miac in IntroAudioList) {
+                if(miac == CurrentAC) {
+                    return IntroAudioList.IndexOf(miac);
+                }
+            }
+            return 0;
+        }
 
         internal IEnumerator Load() {
-
-            Clear();
 
             var folderPath = Environment.CurrentDirectory + Plugin.AudioPath;
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
             var directories = Directory.GetDirectories(folderPath);
             IntroAudioList.Add(DefaultAC);
+            IntroAudioList.Add(MutedAC);
             foreach (var folder in directories) {
-                Logger.log.Info(folder);
-                MultiplayerIntroAudioContainer miac = new MultiplayerIntroAudioContainer("");//FromFolder(folder);
+                //Logger.log.Info(folder);
+                MPIAudioContainer miac = new MPIAudioContainer("");//FromFolder(folder);
                 yield return miac.LoadFromFolder(folder + "/");
                 if(miac != null) {
                     IntroAudioList.Add(miac);
-                    Logger.log.Info("Added: " + miac.Name + " | " + (miac.BuildUpClip != null) + " | " + (miac.ReadyClip != null) + " | " + (miac.SetClip != null) + " | " + (miac.GoClip != null));
-                    if(miac.Name.Equals(PluginConfig.Instance.LastSound)) {
-                        Logger.log.Info("Last used Sounds found!");
+                    //Logger.log.Info("Added: " + miac.Name + " | " + (miac.BuildUpClip != null) + " | " + (miac.ReadyClip != null) + " | " + (miac.SetClip != null) + " | " + (miac.GoClip != null));
+                    if(miac.Name.Equals(MPIConfig.LastSound)) {
+                        //Logger.log.Info("Last used Sounds found!");
                         CurrentAC = miac;
                     }
                 }
             }
-            
+
+            Logger.log.Info((IntroAudioList.Count - 2) + " custom multiplayer intro sound preset(s) loaded!");
+
             if(CurrentAC == null) {
                 CurrentAC = DefaultAC;
             }
+
+        }
+
+        internal IEnumerator Reload() {
+
+            Clear();
+
+            yield return Load();
 
         }
 

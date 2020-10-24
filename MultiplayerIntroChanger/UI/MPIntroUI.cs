@@ -30,7 +30,7 @@ namespace MultiplayerIntroChanger.UI
                 introFlowCoordinator = BeatSaberUI.CreateFlowCoordinator<MPIntroFlowCoordinator>();
             }
 
-            BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(introFlowCoordinator, null, HMUI.ViewController.AnimationDirection.Vertical, false, false);
+            BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(introFlowCoordinator, null, HMUI.ViewController.AnimationDirection.Horizontal, false, false);
         }
 
         private static void IntroMenuButtonPressed() => ShowIntroFlow();

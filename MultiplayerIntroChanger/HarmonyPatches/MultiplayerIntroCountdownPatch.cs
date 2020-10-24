@@ -26,9 +26,9 @@ namespace MultiplayerIntroChanger.HarmonyPatches
 
             }
 
-            MultiplayerIntroAudioContainer miac = MultiplayerIntroAudioLoader.Instance.CurrentAC;
+            MPIAudioContainer miac = MPIAudioLoader.Instance.CurrentAC;
 
-            if (miac == MultiplayerIntroAudioLoader.DefaultAC || miac == null) {
+            if (miac == MPIAudioLoader.DefaultAC || miac == null) {
 
                 ____readyClip = Plugin.Instance.OriginalReadyClip;
                 ____setClip = Plugin.Instance.OriginalSetClip;
