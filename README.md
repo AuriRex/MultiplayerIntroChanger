@@ -18,3 +18,7 @@ Folder structure: (all files are optional and if it's not found the default soun
      - Icon.png
 ```
 [Example sound replacement](https://cdn.discordapp.com/attachments/369815362696380416/769690541788889159/ExampleMPIntroSound.zip)
+
+Note on the default sounds:  
+the Buildup clip plays first and lasts for the entire duration of the animation  
+the Ready, Set and Go clips play on their respective text popups
